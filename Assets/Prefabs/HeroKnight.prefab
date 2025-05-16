@@ -137,7 +137,7 @@ MonoBehaviour:
   m_jumpForce: 4
   m_rollForce: 4
   m_noBlood: 0
-  m_slideDust: {fileID: 1038168246061390451, guid: 8b8c8cc6774fb074cb9139cc631b108e, type: 3}
+  m_slideDust: {fileID: 1038168246061390451, guid: 80cbcc21bd49d9e4385cf5af0011b843, type: 3}
 --- !u!95 &2655505060201611074
 Animator:
   serializedVersion: 5
