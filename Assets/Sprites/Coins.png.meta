@@ -223,11 +223,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_6
+      name: coin1_0
       rect:
         serializedVersion: 2
         x: 44
-        y: 570
+        y: 572
         width: 141
         height: 157
       alignment: 0
@@ -244,7 +244,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_7
+      name: coin1_1
       rect:
         serializedVersion: 2
         x: 255
@@ -265,10 +265,10 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_8
+      name: coin1_2
       rect:
         serializedVersion: 2
-        x: 410
+        x: 408
         y: 570
         width: 82
         height: 157
@@ -286,7 +286,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_9
+      name: coin1_3
       rect:
         serializedVersion: 2
         x: 566
@@ -307,7 +307,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_10
+      name: coin1_4
       rect:
         serializedVersion: 2
         x: 703
@@ -328,7 +328,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_11
+      name: coin1_5
       rect:
         serializedVersion: 2
         x: 887
@@ -349,7 +349,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_12
+      name: coin2_0
       rect:
         serializedVersion: 2
         x: 44
@@ -370,7 +370,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_13
+      name: coin2_1
       rect:
         serializedVersion: 2
         x: 255
@@ -391,7 +391,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_14
+      name: coin2_2
       rect:
         serializedVersion: 2
         x: 410
@@ -412,7 +412,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_15
+      name: coin2_3
       rect:
         serializedVersion: 2
         x: 566
@@ -433,7 +433,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_16
+      name: coin2_4
       rect:
         serializedVersion: 2
         x: 703
@@ -454,7 +454,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_17
+      name: coin2_5
       rect:
         serializedVersion: 2
         x: 886
@@ -475,7 +475,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_18
+      name: coin3_0
       rect:
         serializedVersion: 2
         x: 40
@@ -496,10 +496,10 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_19
+      name: coin3_1
       rect:
         serializedVersion: 2
-        x: 251
+        x: 249
         y: 89
         width: 74
         height: 197
@@ -517,7 +517,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_20
+      name: coin3_2
       rect:
         serializedVersion: 2
         x: 408
@@ -538,7 +538,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_21
+      name: coin3_3
       rect:
         serializedVersion: 2
         x: 563
@@ -559,7 +559,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_22
+      name: coin3_4
       rect:
         serializedVersion: 2
         x: 703
@@ -580,7 +580,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Coins_23
+      name: coin3_5
       rect:
         serializedVersion: 2
         x: 886
@@ -611,30 +611,30 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Coins_10: 1641487917
-      Coins_11: 1099748423
-      Coins_12: 250786865
-      Coins_13: -123075078
-      Coins_14: 1713901872
-      Coins_15: 412755645
-      Coins_16: 1842966220
-      Coins_17: 504346610
-      Coins_18: -435936364
-      Coins_19: -1456675018
-      Coins_20: -554115971
-      Coins_21: 1229311888
-      Coins_22: -507486302
-      Coins_23: -933801857
-      Coins_6: 629384588
-      Coins_7: -2129949339
-      Coins_8: 1264897572
-      Coins_9: -1274884678
       coin0_0: -2075686343
       coin0_1: 908549720
       coin0_2: 518860699
       coin0_3: 942816228
       coin0_4: -1506276838
       coin0_5: 1430611757
+      coin1_0: 629384588
+      coin1_1: -2129949339
+      coin1_2: 1264897572
+      coin1_3: -1274884678
+      coin1_4: 1641487917
+      coin1_5: 1099748423
+      coin2_0: 250786865
+      coin2_1: -123075078
+      coin2_2: 1713901872
+      coin2_3: 412755645
+      coin2_4: 1842966220
+      coin2_5: 504346610
+      coin3_0: -435936364
+      coin3_1: -1456675018
+      coin3_2: -554115971
+      coin3_3: 1229311888
+      coin3_4: -507486302
+      coin3_5: -933801857
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

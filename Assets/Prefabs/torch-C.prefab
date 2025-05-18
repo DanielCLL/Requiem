@@ -120,10 +120,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a90705dec393d469c443fc4a46718a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitbox: {fileID: 0}
   monedaBPrefab: {fileID: 6111983609991085129, guid: 07d8dd067cd2cbf4ca45f395af96c536, type: 3}
-  monedaPPrefab: {fileID: 8209022449836778051, guid: d21cda76fce84a745983a38e5417ed9c, type: 3}
-  monedaOPrefab: {fileID: 1692246351726975301, guid: 770693d52b62d38448e7936333a34089, type: 3}
+  monedaPPrefab: {fileID: 2413527839183635218, guid: b17e303f3bd7ae845938b4183fe659dd, type: 3}
+  monedaOPrefab: {fileID: 3268621063042147692, guid: 9ddd855566fa4e54283c5eefe9b50656, type: 3}
 --- !u!61 &4688769089858881360
 BoxCollider2D:
   m_ObjectHideFlags: 0

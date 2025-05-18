@@ -1576,7 +1576,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: lvl1_19
+      name: lvl1_19_0
       rect:
         serializedVersion: 2
         x: 224
@@ -4757,7 +4757,7 @@ TextureImporter:
         width: 16
         height: 72
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4778,7 +4778,7 @@ TextureImporter:
         width: 16
         height: 72
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -4786,6 +4786,69 @@ TextureImporter:
       bones: []
       spriteID: f82a1b5cf27d8334fba2239cd91dfffc
       internalID: 833786746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lvl1_19_1
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 928
+        width: 96
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9bdc1d60571036448ed91fbbcade123
+      internalID: 2027043478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lvl1_19_2
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 928
+        width: 96
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af2e29e6c8c0068439aff96d92c02b5a
+      internalID: 1876516760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lvl1_13_3
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 928
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0aa6a4dafd324074da0b981ee944065c
+      internalID: -741303080
       vertices: []
       indices: 
       edges: []
@@ -4809,13 +4872,16 @@ TextureImporter:
       lvl1_13_0: 524909388
       lvl1_13_1: -25512570
       lvl1_13_2: -564719679
+      lvl1_13_3: -741303080
       lvl1_14: -1455276455
       lvl1_15: -1595884417
       lvl1_16: 1760031299
       lvl1_17: -880667059
       lvl1_18_1: 1052329792
       lvl1_18_2: -885850525
-      lvl1_19: -2059404192
+      lvl1_19_0: -2059404192
+      lvl1_19_1: 2027043478
+      lvl1_19_2: 1876516760
       lvl1_2: -2020616175
       lvl1_20: 1500650462
       lvl1_21: -1339179532

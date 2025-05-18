@@ -6,16 +6,17 @@ using UnityEngine;
 
 public class GetCoin : MonoBehaviour
 {
-    public AudioSource coinGet;
     public GameObject coinPrefab;
     public int value;
 
+    private AudioSource[] audioManager;
     private PointsController pointsController;
 
     // Start is called before the first frame update
     void Start()
     {
         pointsController = GameObject.Find("GameManager").GetComponent<PointsController>();
+        audioManager = GameObject.Find("AudioManager").GetComponents<AudioSource>();
     }
 
     // Update is called once per frame
@@ -28,11 +29,11 @@ public class GetCoin : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            coinGet.Play();
+            audioManager[0].Play();
             if(pointsController != null) pointsController.AddPoints(value);
             coinPrefab.GetComponent<BoxCollider2D>().enabled = false;
             coinPrefab.GetComponent<SpriteRenderer>().enabled = false;
-            Destroy(coinPrefab,2);
+            Destroy(coinPrefab);
         }
     }
 }

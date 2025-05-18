@@ -13,7 +13,8 @@ public class HeroKnight : MonoBehaviour {
 
     private Animator            m_animator;
     private Rigidbody2D         m_body2d;
-    private Sensor_HeroKnight   m_groundSensor;
+    private Sensor_HeroKnight   m_groundSensor1;
+    private Sensor_HeroKnight   m_groundSensor2;
     private Sensor_HeroKnight   m_wallSensorR1;
     private Sensor_HeroKnight   m_wallSensorR2;
     private Sensor_HeroKnight   m_wallSensorL1;
@@ -23,6 +24,8 @@ public class HeroKnight : MonoBehaviour {
     private bool                m_isWallSliding = false;
     private bool                m_grounded = false;
     private bool                m_rolling = false;
+    private bool                m_isDead = false;
+    private int                 m_lifePoints;
     private int                 m_keys = 0;
     private int                 m_facingDirection = 1;
     private int                 m_currentAttack = 0;
@@ -39,12 +42,14 @@ public class HeroKnight : MonoBehaviour {
         m_gameStart = false;
         m_animator = GetComponent<Animator>();
         m_body2d = GetComponent<Rigidbody2D>();
-        m_groundSensor = transform.Find("GroundSensor").GetComponent<Sensor_HeroKnight>();
+        m_groundSensor1 = transform.Find("GroundSensor1").GetComponent<Sensor_HeroKnight>();
+        m_groundSensor2 = transform.Find("GroundSensor2").GetComponent<Sensor_HeroKnight>();
         m_wallSensorR1 = transform.Find("WallSensor_R1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorR2 = transform.Find("WallSensor_R2").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
         m_auxBlock = m_speed;
+        m_lifePoints = 100;
         //m_rollDuration = m_animator.GetCurrentAnimatorStateInfo("Roll");
     }
 
@@ -57,147 +62,163 @@ public class HeroKnight : MonoBehaviour {
         if (!m_gameStart && transform.position.y <= -4.1635f)
             m_gameStart = true;
 
-        // Increase timer that controls attack combo
-        m_timeSinceAttack += Time.deltaTime;
-
-        // Increase timer that checks roll duration
-        if(m_rolling)
-            m_rollCurrentTime += Time.deltaTime;
-
-        // Disable rolling if timer extends duration
-        if(m_rollCurrentTime > m_rollDuration)
-            m_rolling = false;
-
-        //Check if character just landed on the ground
-        if (!m_grounded && m_groundSensor.State())
+        if (!m_isDead)
         {
-            m_grounded = true;
-            m_animator.SetBool("Grounded", m_grounded);
-        }
+            // Increase timer that controls attack combo
+            m_timeSinceAttack += Time.deltaTime;
 
-        //Check if character just started falling
-        if (m_grounded && !m_groundSensor.State())
-        {
-            m_grounded = false;
-            m_animator.SetBool("Grounded", m_grounded);
-        }
+            // Increase timer that checks roll duration
+            if (m_rolling)
+                m_rollCurrentTime += Time.deltaTime;
 
-        // -- Handle input and movement --
-        float inputX = Input.GetAxis("Horizontal");
+            // Disable rolling if timer extends duration
+            if (m_rollCurrentTime > m_rollDuration)
+                m_rolling = false;
 
-        // Swap direction of sprite depending on walk direction
-        if (inputX > 0)
-        {
-            GetComponent<SpriteRenderer>().flipX = false;
-            m_facingDirection = 1;
-        }
-            
-        else if (inputX < 0)
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-            m_facingDirection = -1;
-        }
+            //Check if character just landed on the ground
+            if (!m_grounded && (m_groundSensor1.State() || m_groundSensor2.State()))
+            {
+                m_grounded = true;
+                m_animator.SetBool("Grounded", m_grounded);
+            }
 
-        // Move
-        if (!m_rolling)
-            m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
+            //Check if character just started falling
+            if (m_grounded && !m_groundSensor1.State() && !m_groundSensor2.State())
+            {
+                m_grounded = false;
+                m_animator.SetBool("Grounded", m_grounded);
+            }
 
-        //Set AirSpeed in animator
-        m_animator.SetFloat("AirSpeedY", m_body2d.velocity.y);
+            // -- Handle input and movement --
+            float inputX = Input.GetAxis("Horizontal");
 
-        // -- Handle Animations --
-        //Wall Slide
-        m_isWallSliding = (m_wallSensorR1.State() && m_wallSensorR2.State()) || (m_wallSensorL1.State() && m_wallSensorL2.State());
-        m_animator.SetBool("WallSlide", m_isWallSliding);
+            // Swap direction of sprite depending on walk direction
+            if (inputX > 0 && !m_isWallSliding)
+            {
+                GetComponent<SpriteRenderer>().flipX = false;
+                m_facingDirection = 1;
+            }
 
-        //Death
-        if (Input.GetKeyDown(KeyCode.E) && !m_rolling)
-        {
-            m_animator.SetBool("noBlood", m_noBlood);
-            m_animator.SetTrigger("Death");
-        }
-            
-        //Hurt
-        else if (Input.GetKeyDown(KeyCode.Q) && !m_rolling)
-            m_animator.SetTrigger("Hurt");
+            else if (inputX < 0 && !m_isWallSliding)
+            {
+                GetComponent<SpriteRenderer>().flipX = true;
+                m_facingDirection = -1;
+            }
 
-        //Attack
-        else if(Input.GetKeyDown(KeyCode.X) && m_timeSinceAttack > 0.25f && !m_rolling && m_speed != 0)
-        {
-            m_currentAttack++;
+            // Move
+            if (!m_rolling)
+                m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
 
-            // Loop back to one after third attack
-            if (m_currentAttack > 3)
-                m_currentAttack = 1;
+            //Set AirSpeed in animator
+            m_animator.SetFloat("AirSpeedY", m_body2d.velocity.y);
 
-            // Reset Attack combo if time since last attack is too large
-            if (m_timeSinceAttack > 1.0f)
-                m_currentAttack = 1;
+            // -- Handle Animations --
+            //Wall Slide
+            bool wallRight = m_wallSensorR1.State() && m_wallSensorR2.State();
+            bool wallLeft = m_wallSensorL1.State() && m_wallSensorL2.State();
 
-            // Call one of three attack animations "Attack1", "Attack2", "Attack3"
-            m_animator.SetTrigger("Attack" + m_currentAttack);
+            m_isWallSliding = (wallRight && inputX == 1) || (wallLeft && inputX == -1);
+            m_animator.SetBool("WallSlide", m_isWallSliding);
 
-            // Reset timer
-            m_timeSinceAttack = 0.0f;
-        }
+            if (m_isWallSliding)
+                GetComponent<Rigidbody2D>().gravityScale = 0.2f;
+            else
+                GetComponent<Rigidbody2D>().gravityScale = 1.0f;
 
-        // Block
-        else if (Input.GetKeyDown(KeyCode.LeftShift) && !m_rolling && m_grounded)
-        {
-            m_auxBlock = m_speed;
-            m_speed = 0;
-            m_animator.SetTrigger("Block");
-            m_animator.SetBool("IdleBlock", true);
-        }
+            //Death
+            if (Input.GetKeyDown("e") || m_lifePoints <= 0)
+            {
+                m_animator.SetBool("noBlood", m_noBlood);
+                m_animator.SetTrigger("Death");
+                m_isDead = true;
+            }
 
-        else if (Input.GetKeyUp(KeyCode.LeftShift) && !m_rolling && m_grounded)
-        {
-            m_speed = m_auxBlock;
-            m_animator.SetBool("IdleBlock", false);
-        }
+            //Hurt
+            else if (Input.GetKeyDown(KeyCode.Q) && !m_rolling)
+            {
+                m_animator.SetTrigger("Hurt");
+                TakeDamage(20);
+            }
 
-        // Roll
-        else if (Input.GetKeyDown(KeyCode.C) && (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
-            && m_grounded && !m_rolling && !m_isWallSliding && Mathf.Abs(Input.GetAxis("Horizontal")) > 0.2)
-        {
-            m_speed = m_auxBlock;
-            m_rolling = true;
-            m_rollCurrentTime = 0f;
-            m_animator.SetTrigger("Roll");
-            m_body2d.velocity = new Vector2(m_facingDirection * m_rollForce, m_body2d.velocity.y);
-        }
+            //Attack
+            else if (Input.GetKeyDown(KeyCode.X) && m_timeSinceAttack > 0.25f && !m_rolling && m_speed != 0)
+            {
+                m_currentAttack++;
 
-        //Jump
-        else if (Input.GetKeyDown(KeyCode.Z) && m_grounded && !m_rolling && m_speed != 0)
-        {
-            m_animator.SetTrigger("Jump");
-            m_grounded = false;
-            m_animator.SetBool("Grounded", m_grounded);
-            m_body2d.velocity = new Vector2(m_body2d.velocity.x, m_jumpForce);
-            m_groundSensor.Disable(0.2f);
-        }
+                // Loop back to one after third attack
+                if (m_currentAttack > 3)
+                    m_currentAttack = 1;
 
-        //Run
-        else if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) //Mathf.Abs(inputX) > Mathf.Epsilon)
-        {
-            // Reset timer
-            m_delayToIdle = 0.05f;
-            m_animator.SetInteger("AnimState", 1);
-        }
+                // Reset Attack combo if time since last attack is too large
+                if (m_timeSinceAttack > 1.0f)
+                    m_currentAttack = 1;
 
-        else if (Input.GetKeyDown(KeyCode.K))
-        {
-            m_keys++;
-            Debug.Log(m_keys);
-        }
+                // Call one of three attack animations "Attack1", "Attack2", "Attack3"
+                m_animator.SetTrigger("Attack" + m_currentAttack);
 
-        //Idle
-        else
-        {
-            // Prevents flickering transitions to idle
-            m_delayToIdle -= Time.deltaTime;
-            if (m_delayToIdle < 0)
-                m_animator.SetInteger("AnimState", 0);
+                // Reset timer
+                m_timeSinceAttack = 0.0f;
+            }
+
+            // Block
+            else if (Input.GetKeyDown(KeyCode.LeftShift) && !m_rolling && m_grounded)
+            {
+                m_auxBlock = m_speed;
+                m_speed = 0;
+                m_animator.SetTrigger("Block");
+                m_animator.SetBool("IdleBlock", true);
+            }
+
+            else if (Input.GetKeyUp(KeyCode.LeftShift) && !m_rolling && m_grounded)
+            {
+                m_speed = m_auxBlock;
+                m_animator.SetBool("IdleBlock", false);
+            }
+
+            // Roll
+            else if (Input.GetKeyDown(KeyCode.C) && (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
+                && m_grounded && !m_rolling && !m_isWallSliding && Mathf.Abs(Input.GetAxis("Horizontal")) > 0.2)
+            {
+                m_speed = m_auxBlock;
+                m_rolling = true;
+                m_rollCurrentTime = 0f;
+                m_animator.SetTrigger("Roll");
+                m_body2d.velocity = new Vector2(m_facingDirection * m_rollForce, m_body2d.velocity.y);
+            }
+
+            //Jump
+            else if (Input.GetKeyDown(KeyCode.Z) && m_grounded && !m_rolling && m_speed != 0)
+            {
+                m_animator.SetTrigger("Jump");
+                m_grounded = false;
+                m_animator.SetBool("Grounded", m_grounded);
+                m_body2d.velocity = new Vector2(m_body2d.velocity.x, m_jumpForce);
+                m_groundSensor1.Disable(0.2f);
+                m_groundSensor2.Disable(0.2f);
+            }
+
+            //Run
+            else if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) //Mathf.Abs(inputX) > Mathf.Epsilon)
+            {
+                // Reset timer
+                m_delayToIdle = 0.05f;
+                m_animator.SetInteger("AnimState", 1);
+            }
+
+            else if (Input.GetKeyDown(KeyCode.K))
+            {
+                m_keys++;
+                Debug.Log(m_keys);
+            }
+
+            //Idle
+            else
+            {
+                // Prevents flickering transitions to idle
+                m_delayToIdle -= Time.deltaTime;
+                if (m_delayToIdle < 0)
+                    m_animator.SetInteger("AnimState", 0);
+            }
         }
     }
 
@@ -228,5 +249,11 @@ public class HeroKnight : MonoBehaviour {
     public void useKey()
     {
         m_keys--;
+    }
+
+    public void TakeDamage(int dmg)
+    {
+        m_lifePoints -= dmg;
+        m_animator.SetTrigger("Hurt");
     }
 }

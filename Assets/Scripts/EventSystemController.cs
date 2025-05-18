@@ -38,7 +38,7 @@ public class EvenSystemController : MonoBehaviour
     }
     public void StartGame()
     {
-        SceneManager.LoadScene("Level0");
+        SceneManager.LoadScene("Game");
     }
     public void QuitGame()
     {
