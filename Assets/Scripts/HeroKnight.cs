@@ -34,7 +34,13 @@ public class HeroKnight : MonoBehaviour {
     private float               m_rollDuration = 8.0f / 14.0f;
     private float               m_rollCurrentTime;
     private float               m_auxBlock;
-
+    public AudioSource swordSound;
+    public AudioSource jumpGrunt;
+    public AudioSource slidingSound;
+    public AudioSource landingSound;
+    public AudioSource hurtSound;
+    public AudioSource shieldSound;
+    private bool landingPlayed = false;
 
     // Use this for initialization
     void Start ()
@@ -137,6 +143,10 @@ public class HeroKnight : MonoBehaviour {
             else if (Input.GetKeyDown(KeyCode.Q) && !m_rolling)
             {
                 m_animator.SetTrigger("Hurt");
+                if (hurtSound != null)
+                {
+                    hurtSound.Play();  // Reproducir el sonido de ataque
+                }
                 TakeDamage(20);
             }
 
@@ -155,7 +165,11 @@ public class HeroKnight : MonoBehaviour {
 
                 // Call one of three attack animations "Attack1", "Attack2", "Attack3"
                 m_animator.SetTrigger("Attack" + m_currentAttack);
-
+                // Reproducir el sonido de ataque
+                if (swordSound != null)
+                {
+                    swordSound.Play();  // Reproducir el sonido de ataque
+                }
                 // Reset timer
                 m_timeSinceAttack = 0.0f;
             }
@@ -165,6 +179,11 @@ public class HeroKnight : MonoBehaviour {
             {
                 m_auxBlock = m_speed;
                 m_speed = 0;
+                // Reproducir el sonido de shield
+                if (shieldSound != null)
+                {
+                    shieldSound.Play();  // Reproducir el sonido de shield
+                }
                 m_animator.SetTrigger("Block");
                 m_animator.SetBool("IdleBlock", true);
             }
@@ -182,6 +201,10 @@ public class HeroKnight : MonoBehaviour {
                 m_speed = m_auxBlock;
                 m_rolling = true;
                 m_rollCurrentTime = 0f;
+                if (slidingSound != null)
+                {
+                    slidingSound.Play();  // Reproducir el sonido de salto
+                }
                 m_animator.SetTrigger("Roll");
                 m_body2d.velocity = new Vector2(m_facingDirection * m_rollForce, m_body2d.velocity.y);
             }
@@ -193,6 +216,10 @@ public class HeroKnight : MonoBehaviour {
                 m_grounded = false;
                 m_animator.SetBool("Grounded", m_grounded);
                 m_body2d.velocity = new Vector2(m_body2d.velocity.x, m_jumpForce);
+                if (jumpGrunt != null)
+                {
+                    jumpGrunt.Play();  // Reproducir el sonido de salto
+                }
                 m_groundSensor1.Disable(0.2f);
                 m_groundSensor2.Disable(0.2f);
             }
