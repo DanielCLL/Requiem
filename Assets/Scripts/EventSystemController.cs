@@ -5,13 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class EvenSystemController : MonoBehaviour
 {
-    public GameObject go_title, go_menuPanel, go_credtisEsc, go_creditsText;
+    public GameObject go_title, go_menuPanel, go_credtisEsc, go_creditsText, pauseMenuUI;
 
     private bool creditsOn;
+    private bool isPaused = false;
     private float timer;
     void Awake()
     {
-       DontDestroyOnLoad(this);
+        Screen.SetResolution(1920, 1080, true);
+        DontDestroyOnLoad(this);
     }
     // Start is called before the first frame update
     void Start()
@@ -22,18 +24,28 @@ public class EvenSystemController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name != "MainMenu")
+        if (SceneManager.GetActiveScene().name == "MainMenu")
         {
-            SceneManager.LoadScene("MainMenu");
-            //Destroy(this.gameObject);
-        }
-        else if ((Input.GetKeyDown(KeyCode.Escape) && creditsOn))
-            deactivateCredits();
-        else if (creditsOn)
+            if ((Input.GetKeyDown(KeyCode.Escape) && creditsOn))
+                deactivateCredits();
+            else if (creditsOn)
+            {
+                go_creditsText.transform.Translate(Vector2.left * 50f * Time.deltaTime);
+                timer -= Time.deltaTime;
+                if (timer > 500f) creditsOn = false;
+            }
+        } else if (SceneManager.GetActiveScene().name == "Game")
         {
-            go_creditsText.transform.Translate(Vector2.left * 50f * Time.deltaTime);
-            timer = Time.deltaTime;
-            if (timer > 500f) creditsOn = false;
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (isPaused)
+                    Resume();
+                else
+                    Pause();
+
+                // SceneManager.LoadScene("PauseMenu");
+                // //Destroy(this.gameObject);
+            }
         }
     }
     public void StartGame()
@@ -62,4 +74,29 @@ public class EvenSystemController : MonoBehaviour
         go_creditsText.SetActive(false);
         go_credtisEsc.SetActive(false);
     }
+    public void Resume()
+    {
+        // Ocultamos menú
+        pauseMenuUI.SetActive(false);
+        // Reanudamos la simulación
+        Time.timeScale = 1f;
+        // Reactivamos audio (opcional)
+        AudioListener.pause = false;
+        isPaused = false;
+    }
+
+        void Pause()
+    {
+        // Congelamos la simulación
+        Time.timeScale = 0f;
+        // Pausamos audio (opcional)
+        AudioListener.pause = true;
+        // Activamos menú
+        pauseMenuUI.SetActive(true);
+
+        isPaused = true;
+    }
+        // Funciones públicas que puedes enlazar a botones
+    public void OnClickResume()    => Resume();
+    public void OnClickQuitGame()  => Application.Quit();
 }
