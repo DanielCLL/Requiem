@@ -7,9 +7,11 @@ public class EvenSystemController : MonoBehaviour
 {
     public GameObject go_title, go_menuPanel, go_credtisEsc, go_creditsText, pauseMenuUI;
 
+    private GameObject heroKnightGO;
     private bool creditsOn;
     private bool isPaused = false;
-    private float timer;
+    private float timer = 0f;
+    private float deathTimer = 2f;
     void Awake()
     {
         Screen.SetResolution(1920, 1080, true);
@@ -36,6 +38,9 @@ public class EvenSystemController : MonoBehaviour
             }
         } else if (SceneManager.GetActiveScene().name == "Game")
         {
+            if (heroKnightGO == null)
+                heroKnightGO = GameObject.Find("HeroKnight");
+
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (isPaused)
@@ -45,6 +50,14 @@ public class EvenSystemController : MonoBehaviour
 
                 // SceneManager.LoadScene("PauseMenu");
                 // //Destroy(this.gameObject);
+            }
+
+            if (heroKnightGO.GetComponent<HeroKnight>().GetIsDead())
+            {
+                if (deathTimer > 0)
+                    deathTimer -= Time.deltaTime;
+                else
+                    SceneManager.LoadScene("DeathScene");
             }
         }
     }

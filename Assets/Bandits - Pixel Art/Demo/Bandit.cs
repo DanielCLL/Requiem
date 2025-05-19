@@ -22,6 +22,7 @@ public class Bandit : MonoBehaviour {
     }
 
     private Animator            m_animator;
+    private RuntimeAnimatorController controller;
     private Rigidbody2D         m_body2d;
     private Sensor_Bandit       m_groundSensor;
     private int                 m_facingDirection;
@@ -31,6 +32,9 @@ public class Bandit : MonoBehaviour {
     private bool                m_isDead = false;
     private float               m_timeSinceDestroy = 0f;
 
+    //Animation clips duration
+    private float               IdleD, CombatIdleD, JumpD, AttackD, HurtD, RunD, DeathD;
+
     // Bandit IA Variables
     private BanditState currentState = BanditState.Idle;
     private float stateTimer = 0f;
@@ -39,6 +43,7 @@ public class Bandit : MonoBehaviour {
     // Use this for initialization
     void Start () {
         m_animator = GetComponent<Animator>();
+        controller = m_animator.runtimeAnimatorController;
         m_body2d = GetComponent<Rigidbody2D>();
         m_groundSensor = transform.Find("GroundSensor").GetComponent<Sensor_Bandit>();
         m_facingDirection = 1;
@@ -46,18 +51,36 @@ public class Bandit : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        foreach (AnimationClip clip in controller.animationClips)
+        {
+            if (clip.name == "Idle")
+                IdleD = clip.length;
+            if (clip.name == "Combat Idle")
+                CombatIdleD = clip.length;
+            if (clip.name == "Run")
+                RunD = clip.length;
+            if (clip.name == "Jump")
+                JumpD = clip.length;
+            if (clip.name == "Hurt")
+                HurtD = clip.length;
+            if (clip.name == "Attack")
+                AttackD = clip.length;
+            if (clip.name == "Death")
+                DeathD = clip.length;
+        }
+
         if (m_isDead)
         {
             if (m_timeSinceDestroy > 0f)
                 m_timeSinceDestroy -= Time.deltaTime;
             else
             {
-                Destroy(gameObject);
+                //Destroy(gameObject);
                 return;
             }
         }
-        else if (Mathf.Abs(transform.position.x - heroKnightGO.transform.position.x) < 2f &&
-                 Mathf.Abs(transform.position.y - heroKnightGO.transform.position.y) < 2f)
+        else if (Mathf.Abs(transform.position.x - heroKnightGO.transform.position.x) < 3f &&
+                 Mathf.Abs(transform.position.y - heroKnightGO.transform.position.y) < 3f)
         {
             switch (currentState)
             {
@@ -78,9 +101,9 @@ public class Bandit : MonoBehaviour {
             m_combatIdle = true;
             m_animator.SetBool("CombatIdle", true);
 
-            if (m_body2d.velocity.x > 0)
+            if (transform.position.x > heroKnightGO.transform.position.x)
                 m_facingDirection = -1;
-            else if (m_body2d.velocity.x < 0)
+            else
                 m_facingDirection = 1;
 
             //Check if character just landed on the ground
@@ -110,6 +133,7 @@ public class Bandit : MonoBehaviour {
             //Death
             if (life <= 0 && !m_isDead)
             {
+                m_timeSinceDestroy = DeathD;
                 m_animator.SetTrigger("Death");
                 m_isDead = true;
             }
@@ -141,17 +165,17 @@ public class Bandit : MonoBehaviour {
                 moveDirection = Random.value < 0.5f ? Vector2.left : Vector2.right;
                 GetComponent<SpriteRenderer>().flipX = moveDirection == Vector2.left;
                 currentState = BanditState.Walking;
-                stateTimer = Random.Range(1f, 2f);
+                stateTimer = Random.Range(1f, 3f);
             }
             else if (nextAction == 2)
             {
                 currentState = BanditState.Attacking;
-                stateTimer = m_animator.runtimeAnimatorController.animationClips[0].length;
+                stateTimer = CombatIdleD;
             }
             else if (nextAction == 3)
             {
                 currentState = BanditState.Jumping;
-                stateTimer = 1.0f; // Tiempo de salto
+                stateTimer = 1.5f; // Tiempo de salto
             }
         }
     }
@@ -174,10 +198,10 @@ public class Bandit : MonoBehaviour {
     void HandleAttacking()
     {
         if (transform.position.x > heroKnightGO.transform.position.x)
-            GetComponent<SpriteRenderer>().flipX = true;
-        else
             GetComponent<SpriteRenderer>().flipX = false;
-        m_animator.SetInteger("AnimState", 1); // Attack
+        else
+            GetComponent<SpriteRenderer>().flipX = true;
+        m_animator.SetTrigger("Attack"); // Attack
         stateTimer -= Time.deltaTime;
 
         if (stateTimer <= 0)
@@ -192,7 +216,7 @@ public class Bandit : MonoBehaviour {
         if (m_grounded)
         {
             m_animator.SetTrigger("Jump");
-            m_body2d.velocity = new Vector2(m_body2d.velocity.x, m_jumpForce);
+            m_body2d.velocity = new Vector2(m_facingDirection, m_jumpForce);
             m_grounded = false;
             m_animator.SetBool("Grounded", false);
         }
@@ -210,7 +234,7 @@ public class Bandit : MonoBehaviour {
     public void TakeDamage(int dmg)
     {
         life -= dmg;
-        m_animator.SetTrigger("Hit");
+        m_animator.SetTrigger("Hurt");
     }
 
     public bool GetIsDead()

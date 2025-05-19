@@ -277,7 +277,10 @@ public class HeroKnight : MonoBehaviour {
         m_lifePoints -= dmg;
         m_animator.SetTrigger("Hurt");
     }
-
+    public bool GetIsDead()
+    {
+        return m_isDead;
+    }
     public void AtackHitbox1()
     {
         swordHitbox.GetComponent<SwordHitbox>().EnableHitbox();

@@ -164,7 +164,7 @@ public class Slime : MonoBehaviour
         }
     }
 
-    public void TakeDamage (int dmg)
+    public void TakeDamage(int dmg)
     {
         life -= dmg;
         slimeAnimator.SetTrigger("Hit");

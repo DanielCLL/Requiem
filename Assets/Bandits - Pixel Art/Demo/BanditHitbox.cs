@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyHitbox : MonoBehaviour
+public class BanditHitbox : MonoBehaviour
 {
-    public GameObject   parentEnemy;
+    private GameObject parentEnemy;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,7 +14,7 @@ public class EnemyHitbox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (parentEnemy.GetComponent<Slime>().GetIsDead())
+        if (parentEnemy.GetComponent<Bandit>().GetIsDead())
         {
             GetComponent<BoxCollider2D>().enabled = false;
             Destroy(gameObject);
@@ -26,7 +25,7 @@ public class EnemyHitbox : MonoBehaviour
     {
         if (collision.CompareTag("SwordHitbox"))
         {
-            parentEnemy.GetComponent<Slime>().TakeDamage(10);
+            parentEnemy.GetComponent<Bandit>().TakeDamage(10);
         }
     }
 }
