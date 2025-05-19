@@ -56,8 +56,8 @@ public class Bandit : MonoBehaviour {
                 return;
             }
         }
-        else if (Mathf.Abs(transform.position.x - heroKnightGO.transform.position.x) < 20f &&
-                 Mathf.Abs(transform.position.y - heroKnightGO.transform.position.y) < 20f)
+        else if (Mathf.Abs(transform.position.x - heroKnightGO.transform.position.x) < 2f &&
+                 Mathf.Abs(transform.position.y - heroKnightGO.transform.position.y) < 2f)
         {
             switch (currentState)
             {
@@ -78,14 +78,9 @@ public class Bandit : MonoBehaviour {
             m_combatIdle = true;
             m_animator.SetBool("CombatIdle", true);
 
-            if (m_body2d.velocity.x < 0)
+            if (m_body2d.velocity.x > 0)
                 m_facingDirection = -1;
-            else if (m_body2d.velocity.x > 0)
-                m_facingDirection = 1;
-
-                if (GetComponent<SpriteRenderer>().flipX)
-                m_facingDirection = -1;
-            else
+            else if (m_body2d.velocity.x < 0)
                 m_facingDirection = 1;
 
             //Check if character just landed on the ground
@@ -104,9 +99,9 @@ public class Bandit : MonoBehaviour {
 
             // Swap direction of sprite depending on walk direction
             if (m_facingDirection == 1)
-                transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+                GetComponent<SpriteRenderer>().flipX = true;
             else if (m_facingDirection == -1)
-                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                GetComponent<SpriteRenderer>().flipX = false;
 
             //Set AirSpeed in animator
             m_animator.SetFloat("AirSpeed", m_body2d.velocity.y);

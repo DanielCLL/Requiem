@@ -153,8 +153,8 @@ public class HeroKnight : MonoBehaviour {
             }
 
             //Attack
-            else if (Input.GetKeyDown(KeyCode.X) && m_timeSinceAttack > 0.25f && !m_rolling && m_speed != 0
-                    && ((inputX <= 0.5 && inputX >= -0.5) || !m_grounded))
+            else if (Input.GetKeyDown(KeyCode.X) && m_timeSinceAttack > 0.25f && !m_rolling && m_speed != 0)
+                    //&& ((inputX <= 0.5 && inputX >= -0.5) || !m_grounded))
             {
                 m_currentAttack++;
                 if (!m_grounded) m_attackOnAir = 1f;
