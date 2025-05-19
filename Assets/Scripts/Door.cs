@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    public HeroKnight player;
+    public GameObject gameManager;
     public GameObject lockGO;
     public AudioSource doorOpen;
 
@@ -26,9 +26,9 @@ public class Door : MonoBehaviour
     {
         if (collision.CompareTag("Player") && !open)
         {
-            if (player.GetKeyNumber() > 0)
+            if (gameManager.GetComponent<GUIController>().GetKeys() > 0)
             {
-                player.useKey();
+                gameManager.GetComponent<GUIController>().UseKey();
                 open = true;
                 Destroy(lockGO);
                 doorOpen.Play();

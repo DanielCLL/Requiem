@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public GameObject objectFollowing;
-    public float minX = -11.0f, maxX = 10.0435f, minY = -7f, maxY = 7f;
+    public float minX = -110.0f, maxX = 100.0435f, minY = -7f, maxY = 7f;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +24,11 @@ public class CameraFollow : MonoBehaviour
             maxX = 35.37f;
         }*/
     }
+
+    /*private void OnCollisionEnter(Collision collision)
+    {
+        c
+    }*/
 
     public void setMinX(float x)
     {

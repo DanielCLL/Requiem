@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PointsController : MonoBehaviour
+public class GUIController : MonoBehaviour
 {
-    public static PointsController Instance;
+    public static GUIController Instance;
 
     public int puntos;
-    public TextMeshPro puntosGUI;
+    public int llaves;
+    public TextMeshProUGUI puntosGUI;
+    public TextMeshProUGUI nLlavesGUI;
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -17,7 +19,10 @@ public class PointsController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        puntosGUI = GameObject.Find("Puntuacion").GetComponent<TextMeshProUGUI>();
+        nLlavesGUI = GameObject.Find("nKeys").GetComponent<TextMeshProUGUI>();
         puntos = 0;
+        llaves = 0;
         ActualizarPuntos();
     }
 
@@ -25,6 +30,7 @@ public class PointsController : MonoBehaviour
     void Update()
     {
         puntosGUI.text = "" + puntos;
+        nLlavesGUI.text = "x " + llaves.ToString();
     }
 
     public void AddPoints(int points)
@@ -43,5 +49,20 @@ public class PointsController : MonoBehaviour
     {
         if (puntosGUI != null)
             puntosGUI.text = puntos.ToString();
+    }
+
+    public void GetKey()
+    {
+        llaves++;
+    }
+
+    public int GetKeys()
+    {
+        return llaves;
+    }
+
+    public void UseKey()
+    {
+        llaves--;
     }
 }

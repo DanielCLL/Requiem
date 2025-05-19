@@ -17,6 +17,7 @@ public class EnemyHitbox : MonoBehaviour
         if (parentEnemy.GetComponent<Slime>().GetIsDead())
         {
             GetComponent<BoxCollider2D>().enabled = false;
+            Destroy(gameObject);
         }
     }
 

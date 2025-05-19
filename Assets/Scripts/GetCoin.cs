@@ -10,12 +10,12 @@ public class GetCoin : MonoBehaviour
     public int value;
 
     private AudioSource[] audioManager;
-    private PointsController pointsController;
+    private GUIController pointsController;
 
     // Start is called before the first frame update
     void Start()
     {
-        pointsController = GameObject.Find("GameManager").GetComponent<PointsController>();
+        pointsController = GameObject.Find("GameManager").GetComponent<GUIController>();
         audioManager = GameObject.Find("AudioManager").GetComponents<AudioSource>();
     }
 

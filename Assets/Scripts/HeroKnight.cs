@@ -27,7 +27,6 @@ public class HeroKnight : MonoBehaviour {
     private bool                m_rolling = false;
     private bool                m_isDead = false;
     private int                 m_lifePoints;
-    private int                 m_keys = 0;
     private int                 m_facingDirection = 1;
     private int                 m_currentAttack = 0;
     private float               inputX;
@@ -237,12 +236,6 @@ public class HeroKnight : MonoBehaviour {
                 m_animator.SetInteger("AnimState", 1);
             }
 
-            else if (Input.GetKeyDown(KeyCode.K))
-            {
-                m_keys++;
-                Debug.Log(m_keys);
-            }
-
             //Idle
             else
             {
@@ -272,15 +265,6 @@ public class HeroKnight : MonoBehaviour {
             // Turn arrow in correct direction
             dust.transform.localScale = new Vector3(m_facingDirection, 1, 1);
         }
-    }
-    public int GetKeyNumber()
-    {
-        return m_keys;
-    }
-
-    public void useKey()
-    {
-        m_keys--;
     }
 
     public void TakeDamage(int dmg)

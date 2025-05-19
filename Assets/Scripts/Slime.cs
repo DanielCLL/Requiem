@@ -51,9 +51,10 @@ public class Slime : MonoBehaviour
                 Destroy(gameObject);
                 return;
             }
-        } 
-        
-        else
+        }
+
+        else if (Mathf.Abs(transform.position.x - heroKnightGO.transform.position.x) < 2f &&
+                 Mathf.Abs(transform.position.y - heroKnightGO.transform.position.y) < 2f)
         {
             switch (currentState)
             {
@@ -79,7 +80,6 @@ public class Slime : MonoBehaviour
             else
                 m_facingDirection = 1;
 
-
             if (life <= 0 && !m_isDead)
             {
                 m_isDead = true;
@@ -88,6 +88,10 @@ public class Slime : MonoBehaviour
                 //GetComponent<BoxCollider2D>().enabled = false;
                 slimeAnimator.SetTrigger("Dead"); ;
             }
+        }
+        else
+        {
+            slimeAnimator.SetInteger("AnimState", 0);
         }
     }
 
@@ -102,14 +106,14 @@ public class Slime : MonoBehaviour
             int nextAction = Random.Range(0, 3); // 0 = idle, 1 = walk, 2 = attack
             if (nextAction == 0)
             {
-                stateTimer = Random.Range(1f, 3f);
+                stateTimer = Random.Range(1f, 2f);
             }
             else if (nextAction == 1)
             {
                 moveDirection = Random.value < 0.5f ? Vector2.left : Vector2.right;
                 GetComponent<SpriteRenderer>().flipX = moveDirection == Vector2.left;
                 currentState = SlimeState.Walking;
-                stateTimer = Random.Range(1f, 2f);
+                stateTimer = Random.Range(1f, 3f);
             }
             else
             {
