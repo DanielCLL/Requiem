@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroKnightGO: {fileID: 0}
-  ballPrefab: {fileID: 5953659785958577828, guid: 88be569e9d10f0c4f862cec81e2917c2, type: 3}
+  ballPrefab: {fileID: 4968443939853042978, guid: e532fadcc5ea2984b8f53e5c69da0e3e, type: 3}
   ballStartL: {fileID: 8977109075372403613}
   ballStartR: {fileID: 1220695685683811522}
   speed: 0.2
@@ -190,7 +190,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.15}
+  m_Offset: {x: -0.0011680126, y: -0.1348336}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -201,7 +201,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.15, y: 0.7}
+  m_Size: {x: 1.129005, y: 0.6696672}
   m_EdgeRadius: 0
 --- !u!1 &3628705477695343114
 GameObject:
@@ -214,6 +214,7 @@ GameObject:
   - component: {fileID: 8801996798417066543}
   - component: {fileID: 8066653640287686289}
   - component: {fileID: 9139277892800415237}
+  - component: {fileID: 4518066857448315366}
   m_Layer: 0
   m_Name: Hitbox
   m_TagString: Untagged
@@ -320,7 +321,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.15}
+  m_Offset: {x: 0.0010838509, y: -0.13483301}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -331,8 +332,21 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.15, y: 0.7}
+  m_Size: {x: 1.1261702, y: 0.669666}
   m_EdgeRadius: 0
+--- !u!114 &4518066857448315366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3628705477695343114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88bad27ad3fa53e45a68f37f9529a8d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentEnemy: {fileID: 1855446086055814234}
 --- !u!1 &3814428205120586548
 GameObject:
   m_ObjectHideFlags: 0

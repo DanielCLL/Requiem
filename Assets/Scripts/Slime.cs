@@ -26,7 +26,7 @@ public class Slime : MonoBehaviour
     private bool        m_isDead = false;
     private bool        m_shoot;
     private bool        m_startedAttack = false;
-    private int        m_facingDirection = 1;
+    private int         m_facingDirection = 1;
 
     // Slime IA Variables
     private SlimeState currentState = SlimeState.Idle;
@@ -85,35 +85,9 @@ public class Slime : MonoBehaviour
                 m_isDead = true;
                 currentState = SlimeState.Dead;
                 m_timeSinceDestroy = slimeAnimator.runtimeAnimatorController.animationClips[3].length + 2f;
+                //GetComponent<BoxCollider2D>().enabled = false;
                 slimeAnimator.SetTrigger("Dead"); ;
             }
-
-            else if (Input.GetKeyDown(KeyCode.Q))
-            {
-                TakeDamage(10);
-            }
-            /*
-            else if (Input.GetKeyDown(KeyCode.X))
-            {
-                slimeAnimator.SetInteger("AnimState", 1);
-                if (m_timeSinceIdle <= 0)
-                {
-                    m_timeSinceIdle = slimeAnimator.runtimeAnimatorController.animationClips[1].length;
-                    m_isAttacking = true;
-                }
-            }
-            
-            else
-            {
-                if (m_timeSinceIdle > 0f)
-                    m_timeSinceIdle -= Time.deltaTime;
-                else
-                {
-                    slimeAnimator.SetInteger("AnimState", 0);
-                    m_isAttacking = false;
-                }
-            }
-            */
         }
     }
 
@@ -190,5 +164,10 @@ public class Slime : MonoBehaviour
     {
         life -= dmg;
         slimeAnimator.SetTrigger("Hit");
+    }
+
+    public bool GetIsDead()
+    {
+        return m_isDead;
     }
 }

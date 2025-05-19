@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UIElements;
 
 public class HeroKnight : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class HeroKnight : MonoBehaviour {
 
     public GameObject           m_camera;
 
+    public GameObject           swordHitbox;
     private Animator            m_animator;
     private Rigidbody2D         m_body2d;
     private Sensor_HeroKnight   m_groundSensor1;
@@ -20,7 +22,6 @@ public class HeroKnight : MonoBehaviour {
     private Sensor_HeroKnight   m_wallSensorL1;
     private Sensor_HeroKnight   m_wallSensorL2;
     private bool                m_gameStart;
-    //private bool              m_isRunning = false;
     private bool                m_isWallSliding = false;
     private bool                m_grounded = false;
     private bool                m_rolling = false;
@@ -29,11 +30,13 @@ public class HeroKnight : MonoBehaviour {
     private int                 m_keys = 0;
     private int                 m_facingDirection = 1;
     private int                 m_currentAttack = 0;
+    private float               inputX;
     private float               m_timeSinceAttack = 0.0f;
     private float               m_delayToIdle = 0.0f;
     private float               m_rollDuration = 8.0f / 14.0f;
     private float               m_rollCurrentTime;
     private float               m_auxBlock;
+    private float               m_attackOnAir = 0.0f;
     public AudioSource swordSound;
     public AudioSource jumpGrunt;
     public AudioSource slidingSound;
@@ -46,6 +49,7 @@ public class HeroKnight : MonoBehaviour {
     void Start ()
     {
         m_gameStart = false;
+        inputX = Input.GetAxis("Horizontal");
         m_animator = GetComponent<Animator>();
         m_body2d = GetComponent<Rigidbody2D>();
         m_groundSensor1 = transform.Find("GroundSensor1").GetComponent<Sensor_HeroKnight>();
@@ -85,6 +89,7 @@ public class HeroKnight : MonoBehaviour {
             if (!m_grounded && (m_groundSensor1.State() || m_groundSensor2.State()))
             {
                 m_grounded = true;
+                m_attackOnAir = 0f;
                 m_animator.SetBool("Grounded", m_grounded);
             }
 
@@ -96,7 +101,9 @@ public class HeroKnight : MonoBehaviour {
             }
 
             // -- Handle input and movement --
-            float inputX = Input.GetAxis("Horizontal");
+            
+            if (m_attackOnAir <= 0f)
+                inputX = Input.GetAxis("Horizontal");
 
             // Swap direction of sprite depending on walk direction
             if (inputX > 0 && !m_isWallSliding)
@@ -126,7 +133,7 @@ public class HeroKnight : MonoBehaviour {
             m_isWallSliding = (wallRight && inputX == 1) || (wallLeft && inputX == -1);
             m_animator.SetBool("WallSlide", m_isWallSliding);
 
-            if (m_isWallSliding)
+            if (m_isWallSliding && m_body2d.velocity.y < 0f)
                 GetComponent<Rigidbody2D>().gravityScale = 0.2f;
             else
                 GetComponent<Rigidbody2D>().gravityScale = 1.0f;
@@ -143,24 +150,22 @@ public class HeroKnight : MonoBehaviour {
             else if (Input.GetKeyDown(KeyCode.Q) && !m_rolling)
             {
                 m_animator.SetTrigger("Hurt");
-                if (hurtSound != null)
-                {
-                    hurtSound.Play();  // Reproducir el sonido de ataque
-                }
                 TakeDamage(20);
             }
 
             //Attack
-            else if (Input.GetKeyDown(KeyCode.X) && m_timeSinceAttack > 0.25f && !m_rolling && m_speed != 0)
+            else if (Input.GetKeyDown(KeyCode.X) && m_timeSinceAttack > 0.25f && !m_rolling && m_speed != 0
+                    && ((inputX <= 0.5 && inputX >= -0.5) || !m_grounded))
             {
                 m_currentAttack++;
+                if (!m_grounded) m_attackOnAir = 1f;
 
                 // Loop back to one after third attack
                 if (m_currentAttack > 3)
                     m_currentAttack = 1;
 
                 // Reset Attack combo if time since last attack is too large
-                if (m_timeSinceAttack > 1.0f)
+                if (m_timeSinceAttack > 1f)
                     m_currentAttack = 1;
 
                 // Call one of three attack animations "Attack1", "Attack2", "Attack3"
@@ -280,7 +285,62 @@ public class HeroKnight : MonoBehaviour {
 
     public void TakeDamage(int dmg)
     {
+        DisableSwordHitbox();
+        if (hurtSound != null)
+        {
+            hurtSound.Play();  // Reproducir el sonido de ataque
+        }
         m_lifePoints -= dmg;
         m_animator.SetTrigger("Hurt");
+    }
+
+    public void AtackHitbox1()
+    {
+        swordHitbox.GetComponent<SwordHitbox>().EnableHitbox();
+        CapsuleCollider2D box = swordHitbox.GetComponent<CapsuleCollider2D>();
+        //swordHitbox.transform.position = new Vector2(transform.position.x, transform.position.y);
+        box.size = new Vector2(1.5f,1.1f);
+        box.offset = new Vector2(0.75f * m_facingDirection, 0.9f);
+    }
+
+    public void AttackHitbox2(int frame)
+    {
+        swordHitbox.GetComponent<SwordHitbox>().EnableHitbox();
+        CapsuleCollider2D box = swordHitbox.GetComponent<CapsuleCollider2D>();
+        if (frame == 1)
+        {
+            //swordHitbox.transform.position = new Vector2(transform.position.x, transform.position.y);
+            box.size = new Vector2(1.5f, 0.62f);
+            box.offset = new Vector2(0.72f * m_facingDirection, 0.98f);
+        }
+        else if (frame == 2)
+        {
+            //swordHitbox.transform.position = new Vector2(transform.position.x, transform.position.y);
+            box.size = new Vector2(1.4f, 0.62f);
+            box.offset = new Vector2(-0.2f * m_facingDirection, 0.7f);
+        }
+    }
+
+    public void AttackHitbox3(int frame)
+    {
+        swordHitbox.GetComponent<SwordHitbox>().EnableHitbox();
+        CapsuleCollider2D box = swordHitbox.GetComponent<CapsuleCollider2D>();
+        if (frame == 2)
+        {
+            //swordHitbox.transform.position = new Vector2(transform.position.x, transform.position.y);
+            box.size = new Vector2(1.5f, 1.3f);
+            box.offset = new Vector2(0.85f * m_facingDirection, 0.78f);
+        }
+        else if (frame == 3)
+        {
+            //swordHitbox.transform.position = new Vector2(transform.position.x, transform.position.y);
+            box.size = new Vector2(1.5f, 1.3f);
+            box.offset = new Vector2(0.85f * m_facingDirection, 0.7f);
+        }
+    }
+
+    public void DisableSwordHitbox()
+    {
+        swordHitbox.GetComponent<SwordHitbox>().DisableHitbox();
     }
 }

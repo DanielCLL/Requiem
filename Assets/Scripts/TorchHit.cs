@@ -19,7 +19,7 @@ public class TorchHit : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("SwordHitbox"))
         {
             float valor = Random.Range(0f, 1f);
             if (valor < 0.6f) Instantiate(monedaBPrefab, transform.position, Quaternion.identity);
