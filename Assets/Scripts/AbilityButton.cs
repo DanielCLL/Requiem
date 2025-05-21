@@ -3,39 +3,47 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+//using UnityEngine.UI;           // para Graphic
+using TMPro;                    // para TextMeshProUGUI
 
 public class AbilityButton : MonoBehaviour
 {
-    public string abilityName;         // "Escudo", "Fireball", etc.
-    public string nextSceneName;       // nombre de la escena destino
+    public string abilityName;
 
+    private GameObject gameManager;
     private Button btn;
+    private float disabledDarkFactor = 0.5f;
+    private Graphic[] allGraphics;     // Image, TextMeshProUGUI, etc.
 
     void Awake()
     {
-        btn = GetComponent<Button>();
-        btn.onClick.AddListener(OnClick);
+        
     }
 
     void Start()
     {
-        // Si ya estaba desbloqueada, desactivo el botón
-        if (GameManager.Instance.IsUnlocked(abilityName))
+        gameManager = GameObject.Find("GameManager");
+        btn = GetComponent<Button>();
+
+        // Cacheamos todos los componentes gráficos hijos para colorearlos luego
+        allGraphics = GetComponentsInChildren<Graphic>(true);
+
+
+
+        // Si ya estaba desbloqueada, desactivo el botón y lo oscurezco
+        if (gameManager.GetComponent<GameManager>().GetIDAbility(abilityName))
+        {
             btn.interactable = false;
+            SetDisabledVisuals();
+        }
     }
 
-    void OnClick()
+    private void SetDisabledVisuals()
     {
-        // Desbloqueo la habilidad
-        GameManager.Instance.Unlock(abilityName);
-
-        // Pongo el botón inactivo para esta sesión
-        btn.interactable = false;
-
-        // Aquí darías la habilidad a tu personaje, p.e.:
-        // Player.Instance.GiveAbility(abilityName);
-
-        // Y cambio de escena
-        SceneManager.LoadScene(nextSceneName);
+        foreach (var g in allGraphics)
+        {
+            // Multiplica cada canal de color (RGBA) por el factor
+            g.color *= disabledDarkFactor;
+        }
     }
 }
